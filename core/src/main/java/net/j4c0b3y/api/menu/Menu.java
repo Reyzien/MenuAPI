@@ -180,6 +180,11 @@ public abstract class Menu {
         }, async);
     }
 
+    /**
+     * Updates the inventory's title while open.
+     *
+     * @param title The new title.
+     */
     public void setTitle(String title) {
         this.title = title;
 
@@ -190,10 +195,14 @@ public abstract class Menu {
         inventory.setContents(this.inventory.getContents());
         this.inventory = inventory;
 
-        // Open the new inventory for the player.
-        handler.schedule(() ->
-            player.openInventory(this.inventory)
-        );
+        handler.ifOpen(player, menu -> {
+            if (menu != this) return;
+
+            // Open the new inventory for the player.
+            handler.schedule(() ->
+                player.openInventory(this.inventory)
+            );
+        });
     }
 
     /**
