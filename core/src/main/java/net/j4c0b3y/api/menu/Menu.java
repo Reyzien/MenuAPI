@@ -50,12 +50,12 @@ public abstract class Menu {
     /**
      * The underlying bukkit inventory the player sees.
      */
-    private final Inventory inventory;
+    private Inventory inventory;
 
     /**
      * The title shown at the top of the inventory.
      */
-    private final String title;
+    private String title;
 
     /**
      * The menu size in rows.
@@ -110,8 +110,12 @@ public abstract class Menu {
             throw new IllegalStateException("No menu handler instance found.");
         }
 
-        this.inventory = handler.getInventoryCreator().apply(player, getTotalSlots(), this.title);
+        this.inventory = createInventory();
         this.async = getClass().isAnnotationPresent(Async.class);
+    }
+
+    private Inventory createInventory() {
+        return handler.getInventoryCreator().apply(player, getTotalSlots(), this.title);
     }
 
     /**
@@ -174,6 +178,22 @@ public abstract class Menu {
                 handler.run(this::onOpen, async);
             });
         }, async);
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+
+        // Create an inventory with the new title.
+        Inventory inventory = createInventory();
+
+        // Copy the contents of the old inventory
+        inventory.setContents(this.inventory.getContents());
+        this.inventory = inventory;
+
+        // Open the new inventory for the player.
+        handler.schedule(() ->
+            player.openInventory(this.inventory)
+        );
     }
 
     /**
