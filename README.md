@@ -204,6 +204,17 @@ public class ExampleButton extends Button {
 }
 ```
 
+#### SimpleButton
+
+For buttons with one time functionality, it is recommended to use the inbuilt SimpleButton class.
+
+```java
+new SimpleButton(
+    item or () -> item,     // required
+    click -> {} or () -> {} // optional
+)
+```
+
 ### Layers
 
 A menu has two layers to place buttons on, the background and the foreground.
