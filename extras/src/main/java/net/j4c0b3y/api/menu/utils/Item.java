@@ -1,4 +1,4 @@
-package net.j4c0b3y.api.menu.item;
+package net.j4c0b3y.api.menu.utils;
 
 import com.cryptomorin.xseries.XEnchantment;
 import com.cryptomorin.xseries.XItemFlag;
